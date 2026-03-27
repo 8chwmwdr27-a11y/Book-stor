@@ -198,6 +198,90 @@ function chatAI(){
 
 // ====== אתחול ======
 displayBooks();
+   // ====== Admin Dashboard משודרג ======
+function adminDashboard(){
+    let html = "=== ADMIN DASHBOARD ===\n\nספרים:\n";
+    books.forEach((b,i)=>html+=`${i+1}. ${b.title} - ${b.price}₪\n`);
+    html+="\nממליצים:\n";
+    recommends.forEach((r,i)=>{
+        const book=books.find(b=>b.id===r.bookId);
+        html+=`${i+1}. ${r.name} על הספר "${book ? book.title : 'ללא ספר'}"\n`;
+    });
+    html+="\nרכישות:\n";
+    purchases.forEach((p,i)=>html+=`${i+1}. ${p.name} קנה ${p.book} בתאריך ${p.date}\n`);
+    alert(html);
+}
+
+// ====== עריכת ממליצים ======
+function editRecommend(id){
+    const r=recommends.find(r=>r.id===id);
+    if(!r){alert("ממליץ לא נמצא"); return;}
+    const name=prompt("שם:", r.name);
+    const text=prompt("טקסט:", r.text);
+    if(name) r.name=name;
+    if(text) r.text=text;
+    localStorage.setItem("recommends", JSON.stringify(recommends));
+    displayRecommends();
+}
+
+// ====== מחיקת ממליץ ======
+function deleteRecommend(id){
+    if(confirm("האם למחוק את הממליץ?")){
+        recommends=recommends.filter(r=>r.id!==id);
+        localStorage.setItem("recommends", JSON.stringify(recommends));
+        displayRecommends();
+    }
+}
+
+// ====== סטטיסטיקות משודרגות ======
+function updateStats(){
+    const statsDiv=document.getElementById("stats");
+    statsDiv.innerHTML=`<div>מספר ספרים: ${books.length}</div>
+                        <div>מספר ממליצים: ${recommends.length}</div>
+                        <div>מספר רכישות: ${purchases.length}</div>`;
+}
+
+// ====== חיפוש וסינון מתקדם ======
+function searchBooks(){
+    const q=document.getElementById("searchInput").value.toLowerCase();
+    const list=document.getElementById("bookList");
+    list.innerHTML="";
+    books.filter(b=>b.title.toLowerCase().includes(q)||b.desc.toLowerCase().includes(q)).forEach(b=>{
+        const recs=recommends.filter(r=>r.bookId===b.id);
+        let recText = recs.map(r=>`<br>ממליץ: ${r.name} - "${r.text}"`).join("");
+        list.innerHTML+=`<div><strong>${b.title}</strong> - ${b.price}₪<br>${b.desc}${recText}</div>`;
+    });
+}
+
+// ====== עדכון סלקטורים של ממליצים ברשימה ======
+function populateRecommendSelect(){
+    const sel=document.getElementById("recBook");
+    sel.innerHTML="";
+    books.forEach(b=>sel.innerHTML+=`<option value="${b.id}">${b.title}</option>`);
+    displayRecommends();
+}
+
+// ====== הצגת ממליצים בצד משתמש ======
+function displayRecommends(){
+    const list=document.getElementById("recommendList");
+    list.innerHTML="";
+    recommends.forEach(r=>{
+        const book=books.find(b=>b.id===r.bookId);
+        if(book){
+            list.innerHTML+=`<div>
+                <strong>${r.name}</strong> על הספר "${book.title}": ${r.text}
+                ${r.img?`<br><img src="${r.img}" width="80" style="border-radius:5px;">`:''}
+                <br><button onclick="editRecommend(${r.id})">ערוך</button>
+                <button onclick="deleteRecommend(${r.id})">מחק</button>
+            </div><hr>`;
+        }
+    });
+}
+
+// ====== אתחול מחדש לאחר טעינת הדף ======
+displayBooks();
+populateRecommendSelect();
+updateStats(); 
 </script>
 
 </body>
