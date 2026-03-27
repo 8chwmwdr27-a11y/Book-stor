@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>bookstore_by-AD</title>
+<title>bookstore_by-AD v0.4</title>
 <style>
 body{margin:0;font-family:'Segoe UI',sans-serif;background:#f5f5f7;color:#333;}
 header{background:#4a90e2;color:#fff;padding:15px;display:flex;justify-content:space-between;align-items:center;}
@@ -29,6 +29,7 @@ button:hover{background:#357ABD;}
 .modal-content{background:#fff;padding:20px;border-radius:10px;width:90%;max-width:500px;max-height:90%;overflow:auto;}
 .stats {margin-top:20px;}
 .stats div {margin-bottom:10px;}
+.admin-buttons button{display:block;width:100%;margin:5px 0;}
 @keyframes fadeIn{from{opacity:0} to{opacity:1}}
 @media(max-width:768px){.book-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));}}
 </style>
@@ -36,8 +37,8 @@ button:hover{background:#357ABD;}
 <body>
 
 <header>
-<h1>bookstore_by-AD</h1>
-<button onclick="openAdmin()">Admin Dashboard</button>
+<h1>bookstore_by-AD v0.4</h1>
+<button onclick="adminLogin()">כניסה למנהל</button>
 </header>
 
 <div class="container">
@@ -57,7 +58,42 @@ button:hover{background:#357ABD;}
 </div>
 </div>
 
-<!-- מודלים מנהל -->
+<!-- מודל רכישה חוקית -->
+<div class="modal" id="modalPurchase">
+  <div class="modal-content">
+    <h3>פרטי רכישה</h3>
+    <form id="purchaseForm">
+      <label>שם מלא:</label><br>
+      <input type="text" id="buyerName" placeholder="שם מלא" required><br><br>
+      
+      <label>מייל:</label><br>
+      <input type="email" id="buyerEmail" placeholder="example@mail.com" required><br><br>
+      
+      <input type="checkbox" id="agreeTerms" required>
+      <label for="agreeTerms">אני מאשר את <a href="#" target="_blank">תנאי השימוש</a> ו<em>מדיניות הפרטיות</em></label><br><br>
+      
+      <button type="submit">אישור רכישה</button>
+      <button type="button" onclick="closeModal('modalPurchase')">ביטול</button>
+    </form>
+  </div>
+</div>
+
+<!-- מודל מנהל כולל סיסמה -->
+<div class="modal" id="modalAdmin">
+<div class="modal-content">
+<h3>Admin Dashboard</h3>
+<div class="admin-buttons">
+<button onclick="openModal('modalCreate')">יצירת ספר חדש</button>
+<button onclick="populateEdit();openModal('modalEdit')">עריכת ספר</button>
+<button onclick="populateDelete();openModal('modalDelete')">מחיקת ספר</button>
+<button onclick="populateRecommend();openModal('modalRecommend')">ממליצים</button>
+<button onclick="updateStats();alert('סטטיסטיקות עודכנו!')">סטטיסטיקות</button>
+<button onclick="closeModal('modalAdmin')">יציאה</button>
+</div>
+</div>
+</div>
+
+<!-- מודלים נוספים כמו יצירה, עריכה, מחיקה, ממליצים נשארים כמו בגרסה הקודמת -->
 <div class="modal" id="modalCreate">
 <div class="modal-content">
 <h3>יצירת ספר חדש</h3>
@@ -103,26 +139,6 @@ button:hover{background:#357ABD;}
 <button onclick="createRecommend()">צור ממליץ</button>
 <button onclick="closeModal('modalRecommend')">סגור</button>
 </div>
-</div>
-
-<!-- מודל רכישה חוקי -->
-<div class="modal" id="modalPurchase">
-  <div class="modal-content">
-    <h3>פרטי רכישה</h3>
-    <form id="purchaseForm">
-      <label>שם מלא:</label><br>
-      <input type="text" id="buyerName" placeholder="שם מלא" required><br><br>
-      
-      <label>מייל:</label><br>
-      <input type="email" id="buyerEmail" placeholder="example@mail.com" required><br><br>
-      
-      <input type="checkbox" id="agreeTerms" required>
-      <label for="agreeTerms">אני מאשר את <a href="#" target="_blank">תנאי השימוש</a> ו<em>מדיניות הפרטיות</em></label><br><br>
-      
-      <button type="submit">אישור רכישה</button>
-      <button type="button" onclick="closeModal('modalPurchase')">ביטול</button>
-    </form>
-  </div>
 </div>
 
 <script>
@@ -171,24 +187,22 @@ const aiDB=[
 {keywords:["חיפוש","search"],answer:"תוכל לחפש ספרים בעזרת סרגל החיפוש שמעל רשימת הספרים."},
 {keywords:["ממליצים","recommend","ממליץ"],answer:"תוכל לראות ממליצים על ספרים עם תמונה, שם וקישור לספר."}
 ];
-
 function toggleChat(){const box=document.getElementById("chatBox");box.style.display=box.style.display==="flex"?"none":"flex";}
 function checkEnter(e){if(e.key==="Enter") sendChat();}
 function sendChat(){const input=document.getElementById("userChat");const text=input.value.trim();if(!text) return;appendMessage(text,"user");input.value="";setTimeout(()=>{generateAIResponse(text)},500);}
 function appendMessage(msg,type){const div=document.createElement("div");div.className=type==="user"?"chat-message user-message":"chat-message ai-message";div.innerText=msg;chatMessages.appendChild(div);chatMessages.scrollTop=chatMessages.scrollHeight;}
 function generateAIResponse(text){text=text.toLowerCase();let response="סליחה, לא הבנתי. שאל על רכישות, הורדות או ספרים.";for(let item of aiDB){if(item.keywords.some(k=>text.includes(k))){response=item.answer; break;}}appendMessage(response,"ai");}
 
-// ====== מודלי מנהל ======
-function openAdmin(){
-    let m=prompt("בחר פעולה: 1-יצירה 2-עריכה 3-מחיקה 4-ממליצים");
-    if(m=="1") openModal("modalCreate");
-    else if(m=="2") {populateEdit(); openModal("modalEdit");}
-    else if(m=="3") {populateDelete(); openModal("modalDelete");}
-    else if(m=="4") {populateRecommend(); openModal("modalRecommend");}
-}
+// ====== כניסה למנהל ======
+function adminLogin(){
+let pass=prompt("הזן סיסמה למנהל:");
+if(pass==="ADMIN1"){openModal("modalAdmin");}else{alert("סיסמה שגויה!");}}
+  
+// ====== מודלי מנהל כמו בגרסה הקודמת ======
 function openModal(id){document.getElementById(id).style.display="flex";}
 function closeModal(id){document.getElementById(id).style.display="none";}
 
+// יצירה, עריכה, מחיקה, ממליצים, סטטיסטיקות – נשארים כמו בגרסה הקודמת
 // ====== יצירת ספר ======
 function createBook(){
     let b={id:Date.now(),title:document.getElementById("newTitle").value,price:document.getElementById("newPrice").value,desc:document.getElementById("newDesc").value,img:document.getElementById("newImg").value,file:document.getElementById("newFile").value};
@@ -276,6 +290,5 @@ document.getElementById("purchaseForm").addEventListener("submit", function(e){
     closeModal('modalPurchase');
 });
 </script>
-
 </body>
 </html>
