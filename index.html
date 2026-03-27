@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>bookstore_by-AD</title>
 <style>
-/* ====== עיצוב מותג + SUS ====== */
 body{margin:0;font-family:'Segoe UI',sans-serif;background:#f5f5f7;color:#333;}
 header{background:#4a90e2;color:#fff;padding:15px;display:flex;justify-content:space-between;align-items:center;}
 header h1{margin:0;}
@@ -150,8 +149,16 @@ function buyBook(id){
 alert("בקשת רכישה נשלחה למנהל. לאחר אישור תקבל מייל עם הספר וקבלה.");
 }
 
-// ====== Chat AI דמו ======
+// ====== Chat AI חכם ======
 const chatMessages=document.getElementById("chatMessages");
+const aiDB=[
+{keywords:["קנה","רכישה","איך לקנות"],answer:"כדי לקנות ספר, לחץ על הספר בדף הבית ואז 'קנה עכשיו'."},
+{keywords:["הורד","download","קובץ"],answer:"תוכל להוריד ספרים שרכשת באזור האישי שלך."},
+{keywords:["אזור אישי","my books","רכישות"],answer:"ב'אזור אישי' תמצא את כל הספרים שרכשת ואת סטטוס הרכישות שלך."},
+{keywords:["חיפוש","search"],answer:"תוכל לחפש ספרים בעזרת סרגל החיפוש שמעל רשימת הספרים."},
+{keywords:["ממליצים","recommend","ממליץ"],answer:"תוכל לראות ממליצים על ספרים עם תמונה, שם וקישור לספר."}
+];
+
 function toggleChat(){
     const box=document.getElementById("chatBox");
     box.style.display=box.style.display==="flex"?"none":"flex";
@@ -173,14 +180,14 @@ function appendMessage(msg,type){
     chatMessages.scrollTop=chatMessages.scrollHeight;
 }
 function generateAIResponse(text){
-    let t=text.toLowerCase();
-    let res="סליחה, לא הבנתי. שאל על רכישות, הורדות או ספרים.";
-    if(t.includes("קנה")||t.includes("רכישה")) res="כדי לקנות ספר, לחץ על הספר בדף הבית ואז 'קנה עכשיו'.";
-    else if(t.includes("הורד")||t.includes("download")) res="תוכל להוריד ספרים שרכשת באזור האישי שלך.";
-    else if(t.includes("אזור אישי")||t.includes("my books")) res="ב'אזור אישי' תמצא את כל הספרים שרכשת ואת סטטוס הרכישות שלך.";
-    else if(t.includes("חיפוש")||t.includes("search")) res="תוכל לחפש ספרים בעזרת סרגל החיפוש שמעל רשימת הספרים.";
-    else if(t.includes("ממליצים")||t.includes("recommend")) res="תוכל לראות ממליצים על ספרים עם תמונה, שם וקישור לספר.";
-    appendMessage(res,"ai");
+    text=text.toLowerCase();
+    let response="סליחה, לא הבנתי. שאל על רכישות, הורדות או ספרים.";
+    for(let item of aiDB){
+        if(item.keywords.some(k=>text.includes(k))){
+            response=item.answer; break;
+        }
+    }
+    appendMessage(response,"ai");
 }
 
 // ====== מודלי מנהל ======
