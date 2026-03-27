@@ -105,8 +105,28 @@ button:hover{background:#357ABD;}
 </div>
 </div>
 
+<!-- מודל רכישה חוקי -->
+<div class="modal" id="modalPurchase">
+  <div class="modal-content">
+    <h3>פרטי רכישה</h3>
+    <form id="purchaseForm">
+      <label>שם מלא:</label><br>
+      <input type="text" id="buyerName" placeholder="שם מלא" required><br><br>
+      
+      <label>מייל:</label><br>
+      <input type="email" id="buyerEmail" placeholder="example@mail.com" required><br><br>
+      
+      <input type="checkbox" id="agreeTerms" required>
+      <label for="agreeTerms">אני מאשר את <a href="#" target="_blank">תנאי השימוש</a> ו<em>מדיניות הפרטיות</em></label><br><br>
+      
+      <button type="submit">אישור רכישה</button>
+      <button type="button" onclick="closeModal('modalPurchase')">ביטול</button>
+    </form>
+  </div>
+</div>
+
 <script>
-// ====== נתוני ספרים וממליצים ======
+// ====== נתונים ראשוניים ======
 let books = JSON.parse(localStorage.getItem("books")) || [
 {id:1,title:"ספר ראשון",price:"49₪",desc:"תיאור קצר",img:"https://via.placeholder.com/200x250?text=Book1",file:"file1.pdf"},
 {id:2,title:"ספר שני",price:"59₪",desc:"תיאור קצר",img:"https://via.placeholder.com/200x250?text=Book2",file:"file2.pdf"}
@@ -114,12 +134,10 @@ let books = JSON.parse(localStorage.getItem("books")) || [
 let recommends = JSON.parse(localStorage.getItem("recommends")) || [];
 localStorage.setItem("books",JSON.stringify(books));
 localStorage.setItem("recommends",JSON.stringify(recommends));
-
-displayBooks();
-updateStats();
+displayBooks(); updateStats();
 
 // ====== תצוגת ספרים ======
-function displayBooks() {
+function displayBooks(){
 const grid=document.getElementById("bookGrid");
 grid.innerHTML="";
 books.forEach(book=>{
@@ -144,11 +162,6 @@ filtered.forEach(book=>{
 });
 }
 
-// ====== רכישה דמו ======
-function buyBook(id){
-alert("בקשת רכישה נשלחה למנהל. לאחר אישור תקבל מייל עם הספר וקבלה.");
-}
-
 // ====== Chat AI חכם ======
 const chatMessages=document.getElementById("chatMessages");
 const aiDB=[
@@ -159,36 +172,11 @@ const aiDB=[
 {keywords:["ממליצים","recommend","ממליץ"],answer:"תוכל לראות ממליצים על ספרים עם תמונה, שם וקישור לספר."}
 ];
 
-function toggleChat(){
-    const box=document.getElementById("chatBox");
-    box.style.display=box.style.display==="flex"?"none":"flex";
-}
+function toggleChat(){const box=document.getElementById("chatBox");box.style.display=box.style.display==="flex"?"none":"flex";}
 function checkEnter(e){if(e.key==="Enter") sendChat();}
-function sendChat(){
-    const input=document.getElementById("userChat");
-    const text=input.value.trim();
-    if(!text) return;
-    appendMessage(text,"user");
-    input.value="";
-    setTimeout(()=>{generateAIResponse(text)},500);
-}
-function appendMessage(msg,type){
-    const div=document.createElement("div");
-    div.className=type==="user"?"chat-message user-message":"chat-message ai-message";
-    div.innerText=msg;
-    chatMessages.appendChild(div);
-    chatMessages.scrollTop=chatMessages.scrollHeight;
-}
-function generateAIResponse(text){
-    text=text.toLowerCase();
-    let response="סליחה, לא הבנתי. שאל על רכישות, הורדות או ספרים.";
-    for(let item of aiDB){
-        if(item.keywords.some(k=>text.includes(k))){
-            response=item.answer; break;
-        }
-    }
-    appendMessage(response,"ai");
-}
+function sendChat(){const input=document.getElementById("userChat");const text=input.value.trim();if(!text) return;appendMessage(text,"user");input.value="";setTimeout(()=>{generateAIResponse(text)},500);}
+function appendMessage(msg,type){const div=document.createElement("div");div.className=type==="user"?"chat-message user-message":"chat-message ai-message";div.innerText=msg;chatMessages.appendChild(div);chatMessages.scrollTop=chatMessages.scrollHeight;}
+function generateAIResponse(text){text=text.toLowerCase();let response="סליחה, לא הבנתי. שאל על רכישות, הורדות או ספרים.";for(let item of aiDB){if(item.keywords.some(k=>text.includes(k))){response=item.answer; break;}}appendMessage(response,"ai");}
 
 // ====== מודלי מנהל ======
 function openAdmin(){
@@ -266,6 +254,27 @@ function updateStats(){
     statsDiv.innerHTML=`<div>מספר ספרים בחנות: ${books.length}</div>
                         <div>מספר ממליצים: ${recommends.length}</div>`;
 }
+
+// ====== מודל רכישה חוקית ======
+let selectedBookId = null;
+function buyBook(id){
+    selectedBookId = id;
+    openModal("modalPurchase");
+}
+document.getElementById("purchaseForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    const name = document.getElementById("buyerName").value;
+    const email = document.getElementById("buyerEmail").value;
+    const agreed = document.getElementById("agreeTerms").checked;
+    if(!agreed){alert("יש לאשר את תנאי השימוש ומדיניות הפרטיות."); return;}
+    const book = books.find(b => b.id === selectedBookId);
+    const purchaseRecord = {id:Date.now(),book:book.title,name,email,date:new Date().toLocaleString()};
+    let purchases = JSON.parse(localStorage.getItem("purchases")) || [];
+    purchases.push(purchaseRecord);
+    localStorage.setItem("purchases", JSON.stringify(purchases));
+    alert(`רכישת ${book.title} בוצעה בהצלחה!\nקבלה תישלח למייל: ${email} (דמו)`);
+    closeModal('modalPurchase');
+});
 </script>
 
 </body>
