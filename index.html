@@ -282,6 +282,68 @@ function displayRecommends(){
 displayBooks();
 populateRecommendSelect();
 updateStats(); 
+    // ====== Chat AI מתקדם עם "זיכרון" ומילים חכמות ======
+const aiDatabase=[
+    {keywords:["ספר","ספרים","ספרי"], answer:"תוכל לראות את רשימת הספרים בחלק העליון של הדף. הקלק על כותרת הספר למידע נוסף."},
+    {keywords:["רכישה","קנה","קניה","קנייה"], answer:"כדי לקנות ספר, לחץ על כפתור 'רכישה' ומלא את הפרטים שלך. אל תשכח לאשר הצהרת פרטיות."},
+    {keywords:["ממליץ","המלצה","המלצות"], answer:"כדי להוסיף ממליץ על ספר, לחץ על כפתור 'הוסף ממליץ', בחר ספר, והכנס שם, טקסט ותמונה."},
+    {keywords:["סטטיסטיקה","סטטיסטיקות"], answer:"סטטיסטיקות החנות מופיעות למטה: מספר ספרים, ממליצים ורכישות."},
+    {keywords:["חיפוש","סינון"], answer:"תוכל להשתמש בתיבת החיפוש למעלה כדי למצוא ספרים לפי שם או תיאור."},
+    {keywords:["AI","עזרה","צ׳אט"], answer:"אני כאן כדי לעזור לך לנווט בחנות ולענות על שאלות על ספרים, רכישות וממליצים."}
+];
+
+function chatAI(){
+    const q=document.getElementById("chatQuestion").value.toLowerCase();
+    const log=document.getElementById("chatBox");
+    let ans="מצטער, אני לא מבין. נסה שאלה אחרת.";
+    aiDatabase.forEach(r=>{
+        if(r.keywords.some(k=>q.includes(k))) ans=r.answer;
+    });
+    log.innerHTML+=`<div><strong>שאלה:</strong> ${q}</div><div><strong>AI:</strong> ${ans}</div>`;
+    log.scrollTop=log.scrollHeight;
+    document.getElementById("chatQuestion").value="";
+}
+
+// ====== רכישות עם דמו קבלה אוטומטית ======
+function buyBook(){
+    const name=document.getElementById("buyName").value.trim();
+    const email=document.getElementById("buyEmail").value.trim();
+    const agree=document.getElementById("buyAgree").checked;
+    const bookId=parseInt(document.getElementById("buyBookSelect").value);
+    if(!name || !email || !agree || !bookId){alert("יש למלא את כל השדות"); return;}
+    const book=books.find(b=>b.id===bookId);
+    const purchase={id:Date.now(),name,email,book:book.title,date:new Date().toLocaleString()};
+    purchases.push(purchase);
+    localStorage.setItem("purchases",JSON.stringify(purchases));
+
+    // דמו שליחת קבלה אוטומטית למייל
+    alert(`הרכישה בוצעה בהצלחה!\n\nקבלה (דמו):\nקונה: ${name}\nספר: ${book.title}\nתאריך: ${purchase.date}\n\n**במציאות, הקבלה תישלח למייל**`);
+    
+    closeModal('modalBuy');
+    displayBooks();
+}
+
+// ====== אנימציות SUS מתקדמות ======
+function addSUSAnimations(){
+    const buttons=document.querySelectorAll('button');
+    buttons.forEach(btn=>{
+        btn.addEventListener('mouseover',()=>{btn.style.backgroundColor="#3498db"; btn.style.color="#fff"; btn.style.transform="scale(1.05)";});
+        btn.addEventListener('mouseout',()=>{btn.style.backgroundColor=""; btn.style.color=""; btn.style.transform="scale(1)";});
+        btn.addEventListener('mousedown',()=>{btn.style.transform="scale(0.95)";});
+        btn.addEventListener('mouseup',()=>{btn.style.transform="scale(1.05)";});
+    });
+}
+
+// ====== אתחול חכם אחרי טעינת הדף ======
+window.addEventListener('load',()=>{
+    displayBooks();
+    populateRecommendSelect();
+    updateStats();
+    addSUSAnimations();
+});
+
+// ====== כלי עזר למודולים נוספים ======
+function generateID(){return Date.now()+Math.floor(Math.random()*1000);}
 </script>
 
 </body>
