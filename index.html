@@ -3,200 +3,158 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HFL Digital Bookstore</title>
+<title>bookstore_by-AD</title>
 <style>
-/* ======== עיצוב בסיסי SUS + צבעי מותג ======== */
-body {
-    margin:0;
-    font-family: 'Segoe UI', sans-serif;
-    background:#f5f5f7;
-    color:#333;
-}
-header {
-    background:#4a90e2;
-    color:#fff;
-    padding:15px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-header h1 {
-    margin:0;
-}
-.container {
-    padding:20px;
-    max-width:1200px;
-    margin:auto;
-}
-.book-grid {
-    display:grid;
-    grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
-    gap:20px;
-}
-.book-card {
-    background:#fff;
-    padding:15px;
-    border-radius:8px;
-    box-shadow:0 4px 8px rgba(0,0,0,0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-.book-card:hover {
-    transform: translateY(-5px);
-    box-shadow:0 8px 16px rgba(0,0,0,0.2);
-}
-.book-card img {
-    width:100%;
-    height:250px;
-    object-fit:cover;
-    border-radius:5px;
-}
-button {
-    padding:10px 15px;
-    margin-top:10px;
-    background:#4a90e2;
-    color:#fff;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
-    transition: background 0.3s;
-}
-button:hover { background:#357ABD; }
-#chatButton {
-    position:fixed;
-    bottom:20px;
-    right:20px;
-    background:#ff5a5f;
-    border-radius:50%;
-    width:60px;
-    height:60px;
-    font-size:24px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    cursor:pointer;
-    box-shadow:0 4px 8px rgba(0,0,0,0.2);
-}
-#chatBox {
-    position:fixed;
-    bottom:90px;
-    right:20px;
-    width:300px;
-    max-height:400px;
-    background:#fff;
-    border-radius:10px;
-    box-shadow:0 8px 16px rgba(0,0,0,0.3);
-    display:none;
-    flex-direction:column;
-    overflow:hidden;
-}
-#chatHeader {
-    background:#ff5a5f;
-    color:#fff;
-    padding:10px;
-    text-align:center;
-}
-#chatMessages {
-    flex:1;
-    padding:10px;
-    overflow-y:auto;
-}
-.chat-message {
-    margin:5px 0;
-    padding:8px 12px;
-    border-radius:15px;
-    max-width:80%;
-    animation:fadeIn 0.5s;
-}
-.user-message { background:#e0e0e0; align-self:flex-end; }
-.ai-message { background:#4a90e2; color:#fff; align-self:flex-start; }
-#chatInput {
-    display:flex;
-    border-top:1px solid #ccc;
-}
-#chatInput input {
-    flex:1;
-    padding:10px;
-    border:none;
-    outline:none;
-}
-#chatInput button {
-    border-radius:0;
-}
-@keyframes fadeIn { from{opacity:0} to{opacity:1} }
-/* Responsive */
-@media(max-width:768px){
-    .book-grid { grid-template-columns: repeat(auto-fill,minmax(150px,1fr)); }
-}
+/* ====== עיצוב מותג + SUS ====== */
+body{margin:0;font-family:'Segoe UI',sans-serif;background:#f5f5f7;color:#333;}
+header{background:#4a90e2;color:#fff;padding:15px;display:flex;justify-content:space-between;align-items:center;}
+header h1{margin:0;}
+.container{padding:20px;max-width:1200px;margin:auto;}
+.book-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px;}
+.book-card{background:#fff;padding:15px;border-radius:8px;box-shadow:0 4px 8px rgba(0,0,0,0.1);transition:transform 0.3s,box-shadow 0.3s;}
+.book-card:hover{transform:translateY(-5px);box-shadow:0 8px 16px rgba(0,0,0,0.2);}
+.book-card img{width:100%;height:250px;object-fit:cover;border-radius:5px;}
+button{padding:10px 15px;margin-top:10px;background:#4a90e2;color:#fff;border:none;border-radius:5px;cursor:pointer;transition:background 0.3s;}
+button:hover{background:#357ABD;}
+#chatButton{position:fixed;bottom:20px;right:20px;background:#ff5a5f;border-radius:50%;width:60px;height:60px;font-size:24px;display:flex;justify-content:center;align-items:center;cursor:pointer;box-shadow:0 4px 8px rgba(0,0,0,0.2);}
+#chatBox{position:fixed;bottom:90px;right:20px;width:300px;max-height:400px;background:#fff;border-radius:10px;box-shadow:0 8px 16px rgba(0,0,0,0.3);display:none;flex-direction:column;overflow:hidden;}
+#chatHeader{background:#ff5a5f;color:#fff;padding:10px;text-align:center;}
+#chatMessages{flex:1;padding:10px;overflow-y:auto;}
+.chat-message{margin:5px 0;padding:8px 12px;border-radius:15px;max-width:80%;animation:fadeIn 0.5s;}
+.user-message{background:#e0e0e0;align-self:flex-end;}
+.ai-message{background:#4a90e2;color:#fff;align-self:flex-start;}
+#chatInput{display:flex;border-top:1px solid #ccc;}
+#chatInput input{flex:1;padding:10px;border:none;outline:none;}
+#chatInput button{border-radius:0;}
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:none;justify-content:center;align-items:center;}
+.modal-content{background:#fff;padding:20px;border-radius:10px;width:90%;max-width:500px;max-height:90%;overflow:auto;}
+.stats {margin-top:20px;}
+.stats div {margin-bottom:10px;}
+@keyframes fadeIn{from{opacity:0} to{opacity:1}}
+@media(max-width:768px){.book-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));}}
 </style>
 </head>
 <body>
 
 <header>
-    <h1>HFL Digital Bookstore</h1>
-    <button onclick="openAdmin()">Admin Dashboard</button>
+<h1>bookstore_by-AD</h1>
+<button onclick="openAdmin()">Admin Dashboard</button>
 </header>
 
 <div class="container">
-    <input type="text" id="searchInput" placeholder="חיפוש ספרים..." onkeyup="filterBooks()">
-    <div class="book-grid" id="bookGrid"></div>
+<input type="text" id="searchInput" placeholder="חיפוש ספרים..." onkeyup="filterBooks()">
+<div class="book-grid" id="bookGrid"></div>
+<div class="stats" id="stats"></div>
 </div>
 
 <!-- Chat AI Button -->
 <div id="chatButton" onclick="toggleChat()">💬</div>
 <div id="chatBox">
-    <div id="chatHeader">HFL AI Assistant</div>
-    <div id="chatMessages"></div>
-    <div id="chatInput">
-        <input type="text" id="userChat" placeholder="כתוב כאן..." onkeypress="checkEnter(event)">
-        <button onclick="sendChat()">Send</button>
-    </div>
+<div id="chatHeader">HFL AI Assistant</div>
+<div id="chatMessages"></div>
+<div id="chatInput">
+<input type="text" id="userChat" placeholder="כתוב כאן..." onkeypress="checkEnter(event)">
+<button onclick="sendChat()">Send</button>
+</div>
+</div>
+
+<!-- מודלים מנהל -->
+<div class="modal" id="modalCreate">
+<div class="modal-content">
+<h3>יצירת ספר חדש</h3>
+<input type="text" id="newTitle" placeholder="שם הספר"><br><br>
+<input type="text" id="newPrice" placeholder="מחיר"><br><br>
+<textarea id="newDesc" placeholder="תיאור קצר"></textarea><br><br>
+<input type="text" id="newImg" placeholder="קישור תמונה"><br><br>
+<input type="text" id="newFile" placeholder="קישור קובץ ספר"><br><br>
+<button onclick="createBook()">פרסם</button>
+<button onclick="closeModal('modalCreate')">סגור</button>
+</div>
+</div>
+
+<div class="modal" id="modalEdit">
+<div class="modal-content">
+<h3>עריכת ספר</h3>
+<select id="editSelect" onchange="loadEditBook()"></select><br><br>
+<input type="text" id="editTitle" placeholder="שם הספר"><br><br>
+<input type="text" id="editPrice" placeholder="מחיר"><br><br>
+<textarea id="editDesc" placeholder="תיאור קצר"></textarea><br><br>
+<input type="text" id="editImg" placeholder="קישור תמונה"><br><br>
+<input type="text" id="editFile" placeholder="קישור קובץ ספר"><br><br>
+<button onclick="saveEditBook()">שמור</button>
+<button onclick="closeModal('modalEdit')">סגור</button>
+</div>
+</div>
+
+<div class="modal" id="modalDelete">
+<div class="modal-content">
+<h3>מחיקת ספר</h3>
+<select id="deleteSelect"></select><br><br>
+<button onclick="deleteBook()">מחק ספר</button>
+<button onclick="closeModal('modalDelete')">סגור</button>
+</div>
+</div>
+
+<div class="modal" id="modalRecommend">
+<div class="modal-content">
+<h3>יצירת ממליץ</h3>
+<input type="text" id="recName" placeholder="שם הממליץ"><br><br>
+<input type="text" id="recImg" placeholder="תמונת פרופיל"><br><br>
+<select id="recBookSelect"></select><br><br>
+<button onclick="createRecommend()">צור ממליץ</button>
+<button onclick="closeModal('modalRecommend')">סגור</button>
+</div>
 </div>
 
 <script>
-// ====== נתוני ספרים ראשוניים ======
-let books = [
-    {id:1, title:"ספר דיגיטלי ראשון", price:"49₪", desc:"תיאור קצר", img:"https://via.placeholder.com/200x250?text=Book1"},
-    {id:2, title:"ספר דיגיטלי שני", price:"59₪", desc:"תיאור קצר", img:"https://via.placeholder.com/200x250?text=Book2"},
-    {id:3, title:"ספר דיגיטלי שלישי", price:"39₪", desc:"תיאור קצר", img:"https://via.placeholder.com/200x250?text=Book3"}
+// ====== נתוני ספרים וממליצים ======
+let books = JSON.parse(localStorage.getItem("books")) || [
+{id:1,title:"ספר ראשון",price:"49₪",desc:"תיאור קצר",img:"https://via.placeholder.com/200x250?text=Book1",file:"file1.pdf"},
+{id:2,title:"ספר שני",price:"59₪",desc:"תיאור קצר",img:"https://via.placeholder.com/200x250?text=Book2",file:"file2.pdf"}
 ];
+let recommends = JSON.parse(localStorage.getItem("recommends")) || [];
 localStorage.setItem("books",JSON.stringify(books));
+localStorage.setItem("recommends",JSON.stringify(recommends));
 
-function displayBooks() {
-    const grid = document.getElementById("bookGrid");
-    grid.innerHTML = "";
-    let savedBooks = JSON.parse(localStorage.getItem("books")) || [];
-    savedBooks.forEach(book=>{
-        const card = document.createElement("div");
-        card.className="book-card";
-        card.innerHTML=`<img src="${book.img}"><h3>${book.title}</h3><p>${book.desc}</p><strong>${book.price}</strong><br><button onclick="buyBook(${book.id})">קנה עכשיו</button>`;
-        grid.appendChild(card);
-    });
-}
 displayBooks();
+updateStats();
 
-function filterBooks() {
-    const query = document.getElementById("searchInput").value.toLowerCase();
-    let savedBooks = JSON.parse(localStorage.getItem("books")) || [];
-    const filtered = savedBooks.filter(b=>b.title.toLowerCase().includes(query));
-    const grid = document.getElementById("bookGrid");
-    grid.innerHTML = "";
-    filtered.forEach(book=>{
-        const card = document.createElement("div");
-        card.className="book-card";
-        card.innerHTML=`<img src="${book.img}"><h3>${book.title}</h3><p>${book.desc}</p><strong>${book.price}</strong><br><button onclick="buyBook(${book.id})">קנה עכשיו</button>`;
-        grid.appendChild(card);
-    });
+// ====== תצוגת ספרים ======
+function displayBooks() {
+const grid=document.getElementById("bookGrid");
+grid.innerHTML="";
+books.forEach(book=>{
+    const card=document.createElement("div");
+    card.className="book-card";
+    card.innerHTML=`<img src="${book.img}"><h3>${book.title}</h3><p>${book.desc}</p><strong>${book.price}</strong><br><button onclick="buyBook(${book.id})">קנה עכשיו</button>`;
+    grid.appendChild(card);
+});
 }
 
-function buyBook(id) {
-    alert("בקשת רכישה נשלחה למנהל. לאחר אישור תקבל מייל עם הספר וקבלה.");
+// ====== חיפוש וסינון ======
+function filterBooks(){
+const query=document.getElementById("searchInput").value.toLowerCase();
+const filtered=books.filter(b=>b.title.toLowerCase().includes(query));
+const grid=document.getElementById("bookGrid");
+grid.innerHTML="";
+filtered.forEach(book=>{
+    const card=document.createElement("div");
+    card.className="book-card";
+    card.innerHTML=`<img src="${book.img}"><h3>${book.title}</h3><p>${book.desc}</p><strong>${book.price}</strong><br><button onclick="buyBook(${book.id})">קנה עכשיו</button>`;
+    grid.appendChild(card);
+});
+}
+
+// ====== רכישה דמו ======
+function buyBook(id){
+alert("בקשת רכישה נשלחה למנהל. לאחר אישור תקבל מייל עם הספר וקבלה.");
 }
 
 // ====== Chat AI דמו ======
-const chatMessages = document.getElementById("chatMessages");
+const chatMessages=document.getElementById("chatMessages");
 function toggleChat(){
     const box=document.getElementById("chatBox");
-    box.style.display = box.style.display==="flex"?"none":"flex";
+    box.style.display=box.style.display==="flex"?"none":"flex";
 }
 function checkEnter(e){if(e.key==="Enter") sendChat();}
 function sendChat(){
@@ -212,22 +170,94 @@ function appendMessage(msg,type){
     div.className=type==="user"?"chat-message user-message":"chat-message ai-message";
     div.innerText=msg;
     chatMessages.appendChild(div);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+    chatMessages.scrollTop=chatMessages.scrollHeight;
 }
-function generateAIResponse(userText){
-    let response = "סליחה, אני לא מבין. נסה לשאול על רכישות, הורדות או ספרים.";
-    userText = userText.toLowerCase();
-    if(userText.includes("קנה") || userText.includes("רכישה")) response="כדי לקנות ספר, לחץ על הספר בדף הבית ואז לחץ 'קנה עכשיו'.";
-    else if(userText.includes("הורד") || userText.includes("download")) response="אתה יכול להוריד ספרים שרכשת באזור האישי שלך.";
-    else if(userText.includes("אזור אישי") || userText.includes("my books")) response="ב'אזור אישי' תמצא את כל הספרים שרכשת ואת סטטוס הרכישות שלך.";
-    else if(userText.includes("חיפוש") || userText.includes("search")) response="תוכל לחפש ספרים בעזרת סרגל החיפוש שמעל רשימת הספרים בדף הבית.";
-    else if(userText.includes("ממליצים") || userText.includes("recommend")) response="בכל ספר תוכל לראות ממליצים עם תמונה ושם, ולחיצה עליהם תוביל לספר המומלץ.";
-    appendMessage(response,"ai");
+function generateAIResponse(text){
+    let t=text.toLowerCase();
+    let res="סליחה, לא הבנתי. שאל על רכישות, הורדות או ספרים.";
+    if(t.includes("קנה")||t.includes("רכישה")) res="כדי לקנות ספר, לחץ על הספר בדף הבית ואז 'קנה עכשיו'.";
+    else if(t.includes("הורד")||t.includes("download")) res="תוכל להוריד ספרים שרכשת באזור האישי שלך.";
+    else if(t.includes("אזור אישי")||t.includes("my books")) res="ב'אזור אישי' תמצא את כל הספרים שרכשת ואת סטטוס הרכישות שלך.";
+    else if(t.includes("חיפוש")||t.includes("search")) res="תוכל לחפש ספרים בעזרת סרגל החיפוש שמעל רשימת הספרים.";
+    else if(t.includes("ממליצים")||t.includes("recommend")) res="תוכל לראות ממליצים על ספרים עם תמונה, שם וקישור לספר.";
+    appendMessage(res,"ai");
 }
 
-// ====== Dashboard Admin (דמו פשוט) ======
+// ====== מודלי מנהל ======
 function openAdmin(){
-    alert("דמו צד מנהל נפתח כאן (יצירה, עריכה, מחיקה, מכירות, ממליצים)");
+    let m=prompt("בחר פעולה: 1-יצירה 2-עריכה 3-מחיקה 4-ממליצים");
+    if(m=="1") openModal("modalCreate");
+    else if(m=="2") {populateEdit(); openModal("modalEdit");}
+    else if(m=="3") {populateDelete(); openModal("modalDelete");}
+    else if(m=="4") {populateRecommend(); openModal("modalRecommend");}
+}
+function openModal(id){document.getElementById(id).style.display="flex";}
+function closeModal(id){document.getElementById(id).style.display="none";}
+
+// ====== יצירת ספר ======
+function createBook(){
+    let b={id:Date.now(),title:document.getElementById("newTitle").value,price:document.getElementById("newPrice").value,desc:document.getElementById("newDesc").value,img:document.getElementById("newImg").value,file:document.getElementById("newFile").value};
+    books.push(b); localStorage.setItem("books",JSON.stringify(books));
+    displayBooks(); updateStats(); closeModal("modalCreate");
+}
+
+// ====== עריכת ספר ======
+function populateEdit(){
+    let sel=document.getElementById("editSelect"); sel.innerHTML="";
+    books.forEach(b=>{let opt=document.createElement("option"); opt.value=b.id; opt.innerText=b.title; sel.appendChild(opt);});
+    loadEditBook();
+}
+function loadEditBook(){
+    let id=parseInt(document.getElementById("editSelect").value);
+    let b=books.find(x=>x.id===id);
+    document.getElementById("editTitle").value=b.title;
+    document.getElementById("editPrice").value=b.price;
+    document.getElementById("editDesc").value=b.desc;
+    document.getElementById("editImg").value=b.img;
+    document.getElementById("editFile").value=b.file;
+}
+function saveEditBook(){
+    let id=parseInt(document.getElementById("editSelect").value);
+    let b=books.find(x=>x.id===id);
+    b.title=document.getElementById("editTitle").value;
+    b.price=document.getElementById("editPrice").value;
+    b.desc=document.getElementById("editDesc").value;
+    b.img=document.getElementById("editImg").value;
+    b.file=document.getElementById("editFile").value;
+    localStorage.setItem("books",JSON.stringify(books));
+    displayBooks(); updateStats(); closeModal("modalEdit");
+}
+
+// ====== מחיקת ספר ======
+function populateDelete(){
+    let sel=document.getElementById("deleteSelect"); sel.innerHTML="";
+    books.forEach(b=>{let opt=document.createElement("option"); opt.value=b.id; opt.innerText=b.title; sel.appendChild(opt);});
+}
+function deleteBook(){
+    let id=parseInt(document.getElementById("deleteSelect").value);
+    books=books.filter(x=>x.id!==id);
+    localStorage.setItem("books",JSON.stringify(books));
+    displayBooks(); updateStats(); closeModal("modalDelete");
+}
+
+// ====== ממליצים ======
+function populateRecommend(){
+    let sel=document.getElementById("recBookSelect"); sel.innerHTML="";
+    books.forEach(b=>{let opt=document.createElement("option"); opt.value=b.id; opt.innerText=b.title; sel.appendChild(opt);});
+}
+function createRecommend(){
+    let r={name:document.getElementById("recName").value,img:document.getElementById("recImg").value,bookId:parseInt(document.getElementById("recBookSelect").value)};
+    recommends.push(r); localStorage.setItem("recommends",JSON.stringify(recommends));
+    alert("ממליץ נוצר בהצלחה!");
+    closeModal("modalRecommend");
+    updateStats();
+}
+
+// ====== סטטיסטיקות ======
+function updateStats(){
+    const statsDiv=document.getElementById("stats");
+    statsDiv.innerHTML=`<div>מספר ספרים בחנות: ${books.length}</div>
+                        <div>מספר ממליצים: ${recommends.length}</div>`;
 }
 </script>
 
