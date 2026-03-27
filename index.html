@@ -3,348 +3,295 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bookstore by-AD</title>
+<title>חנות ספרים דיגיטלית HFL</title>
 <style>
-body{margin:0;font-family:'Segoe UI',sans-serif;background:#f0f2f5;color:#333;}
-header,footer{background:#2c3e50;color:#fff;padding:10px;text-align:center;}
-main{padding:20px;}
-button{cursor:pointer;transition:0.3s;animation:pop 0.5s;}
-button:hover{transform:scale(1.05);}
-@keyframes pop{0%{transform:scale(0.9);}100%{transform:scale(1);}}
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);}
-.modal-content{background:#fff;margin:10% auto;padding:20px;width:90%;max-width:500px;border-radius:8px;position:relative;}
-input,textarea,select{width:100%;margin:5px 0;padding:8px;}
+body {margin:0;font-family:'Segoe UI',sans-serif;background:#f4f4f9;color:#333;}
+header, footer {background:#222;color:#fff;text-align:center;padding:10px;}
+.container {max-width:1200px;margin:auto;padding:20px;}
+h1,h2,h3 {margin:0 0 10px 0;}
+button {padding:8px 16px;margin:5px;border:none;border-radius:5px;cursor:pointer;}
+button.primary{background:#4caf50;color:#fff;}
+button.danger{background:#f44336;color:#fff;}
+button.info{background:#2196f3;color:#fff;}
+.card{background:#fff;padding:15px;margin:10px 0;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.2);}
+.modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;overflow:auto;background:rgba(0,0,0,0.5);}
+.modal-content{background:#fff;margin:50px auto;padding:20px;border-radius:10px;width:90%;max-width:500px;position:relative;}
+.close{position:absolute;top:10px;right:15px;font-size:20px;cursor:pointer;}
+input, textarea, select {width:100%;padding:8px;margin:5px 0 15px 0;border-radius:5px;border:1px solid #ccc;}
+.star-rating {display:flex;flex-direction:row-reverse;font-size:1.2em;justify-content:flex-start;}
+.star-rating input{display:none;}
+.star-rating label{color:#ccc;cursor:pointer;}
+.star-rating input:checked ~ label, .star-rating label:hover, .star-rating label:hover ~ label{color:gold;}
+.round-img{width:60px;height:60px;border-radius:50%;object-fit:cover;}
+.books-list, .reviews-list{display:flex;flex-wrap:wrap;gap:15px;}
+.books-list .card, .reviews-list .card{flex:1 1 250px;}
+.checkbox-legal{margin-bottom:15px;}
+.success-message{background:#d4edda;color:#155724;padding:10px;border-radius:5px;margin-bottom:10px;}
 </style>
 </head>
 <body>
 
-<header><h1>Bookstore by-AD</h1></header>
+<header>
+<h1>חנות ספרים דיגיטלית HFL</h1>
+</header>
 
-<main>
-<h2>ספרים זמינים</h2>
-<div id="bookList"></div>
-<button onclick="openModal('modalBuy')">רכישה</button>
-<button onclick="openAdmin()">Admin Dashboard</button>
+<div class="container">
 
-<h2>ממליצים</h2>
-<div id="recommendList"></div>
-<button onclick="openModal('modalRecommend')">הוסף ממליץ</button>
+<!-- ========================== צד מנהל ========================== -->
+<section id="admin-panel">
+<h2>לוח ניהול</h2>
+<button class="primary" onclick="openModal('addBookModal')">יצירת ספר חדש</button>
+<button class="primary" onclick="openModal('addReviewerModal')">הוספת ממליץ</button>
+<button class="info" onclick="openModal('managePurchasesModal')">ניהול רכישות</button>
 
-<h2>חיפוש וסינון</h2>
-<input type="text" id="searchInput" placeholder="חפש ספרים..." oninput="searchBooks()">
+<h3>ספרים קיימים</h3>
+<div class="books-list" id="adminBooksList"></div>
 
-<h2>סטטיסטיקות</h2>
-<div id="stats"></div>
+<h3>ממליצים קיימים</h3>
+<div class="reviews-list" id="adminReviewersList"></div>
+</section>
 
-<h2>עזרה - Chat AI</h2>
-<button onclick="openModal('modalChat')">Chat AI</button>
-<div id="chatLog" style="background:#eee;padding:10px;height:150px;overflow-y:auto;"></div>
-<input type="text" id="chatInput" placeholder="שאל אותי משהו..." onkeypress="if(event.key==='Enter')sendChat()">
-</main>
+<!-- ========================== צד משתמש ========================== -->
+<section id="user-panel">
+<h2>ספרים לרכישה</h2>
+<div class="books-list" id="userBooksList"></div>
+<div id="userMessage"></div>
+</section>
 
-<footer>© 2026 Bookstore by-AD</footer>
-
-<!-- Modals -->
-<div id="modalBook" class="modal">
-<div class="modal-content" id="modalBookContent"></div>
 </div>
 
-<div id="modalRecommend" class="modal">
+<!-- ========================== מודלים ========================== -->
+<!-- מודל יצירת ספר -->
+<div id="addBookModal" class="modal">
 <div class="modal-content">
-<h3>הוסף ממליץ</h3>
-<form id="recommendForm">
-<input type="text" id="recName" placeholder="שם הממליץ" required>
-<select id="recBook"></select>
-<textarea id="recText" placeholder="טקסט הממליץ" required></textarea>
-<input type="file" id="recImg" accept="image/*">
-<button type="submit">שמור ממליץ</button>
-<button type="button" onclick="closeModal('modalRecommend')">סגור</button>
-</form>
+<span class="close" onclick="closeModal('addBookModal')">&times;</span>
+<h3>יצירת ספר חדש</h3>
+<input type="text" id="bookName" placeholder="שם הספר">
+<input type="number" id="bookPrice" placeholder="מחיר">
+<textarea id="bookDescription" placeholder="תיאור הספר"></textarea>
+<input type="file" id="bookImage" accept="image/*">
+<input type="file" id="bookPDF" accept="application/pdf">
+<button class="primary" onclick="addBook()">פרסם ספר</button>
 </div>
 </div>
 
-<div id="modalBuy" class="modal">
+<!-- מודל הוספת ממליץ -->
+<div id="addReviewerModal" class="modal">
 <div class="modal-content">
+<span class="close" onclick="closeModal('addReviewerModal')">&times;</span>
+<h3>הוספת ממליץ</h3>
+<input type="text" id="reviewerName" placeholder="שם הממליץ">
+<textarea id="reviewerText" placeholder="תיאור המלצה על הספר"></textarea>
+<select id="reviewerBookSelect"></select>
+<input type="file" id="reviewerImage" accept="image/*">
+<div class="star-rating">
+<input type="radio" id="star5" name="rating" value="5"><label for="star5">&#9733;</label>
+<input type="radio" id="star4" name="rating" value="4"><label for="star4">&#9733;</label>
+<input type="radio" id="star3" name="rating" value="3"><label for="star3">&#9733;</label>
+<input type="radio" id="star2" name="rating" value="2"><label for="star2">&#9733;</label>
+<input type="radio" id="star1" name="rating" value="1"><label for="star1">&#9733;</label>
+</div>
+<button class="primary" onclick="addReviewer()">פרסם ממליץ</button>
+</div>
+</div>
+
+<!-- מודל ניהול רכישות -->
+<div id="managePurchasesModal" class="modal">
+<div class="modal-content">
+<span class="close" onclick="closeModal('managePurchasesModal')">&times;</span>
+<h3>ניהול רכישות</h3>
+<div id="purchasesList"></div>
+</div>
+</div>
+
+<!-- מודל רכישה בצד משתמש -->
+<div id="purchaseModal" class="modal">
+<div class="modal-content">
+<span class="close" onclick="closeModal('purchaseModal')">&times;</span>
 <h3>רכישת ספר</h3>
-<input type="text" id="buyName" placeholder="שם מלא" required>
-<input type="email" id="buyEmail" placeholder="מייל" required>
-<input type="checkbox" id="buyAgree" required> אני מסכים לתנאי שימוש
-<select id="buyBookSelect"></select>
-<button onclick="buyBook()">רכוש ספר</button>
-<button type="button" onclick="closeModal('modalBuy')">סגור</button>
+<input type="text" id="buyerName" placeholder="שם מלא">
+<input type="email" id="buyerEmail" placeholder="מייל">
+<div class="checkbox-legal">
+<label><input type="checkbox" id="legalCheckbox"> אני מאשר/ת את תנאי הפרטיות</label>
 </div>
-</div>
-
-<div id="modalChat" class="modal">
-<div class="modal-content">
-<h3>Chat AI</h3>
-<div id="chatBox"></div>
-<input type="text" id="chatQuestion" placeholder="שאל שאלה..." onkeypress="if(event.key==='Enter')chatAI()">
-<button type="button" onclick="closeModal('modalChat')">סגור</button>
+<button class="primary" onclick="confirmPurchase()">אישור רכישה</button>
+<div id="purchaseMessage"></div>
 </div>
 </div>
 
 <script>
-// ====== ספרים ======
-let books=JSON.parse(localStorage.getItem("books"))||[];
-let recommends=JSON.parse(localStorage.getItem("recommends"))||[];
-let purchases=JSON.parse(localStorage.getItem("purchases"))||[];
+/* ===================== משתנים ===================== */
+let books = JSON.parse(localStorage.getItem('books')||'[]');
+let reviewers = JSON.parse(localStorage.getItem('reviewers')||'[]');
+let purchases = JSON.parse(localStorage.getItem('purchases')||'[]');
+let currentPurchaseBookId = null;
 
-function displayBooks(){
-    const list=document.getElementById("bookList");
-    list.innerHTML="";
-    books.forEach(b=>{
-        list.innerHTML+=`<div><strong>${b.title}</strong> - ${b.price}₪<br>${b.desc}</div>`;
-    });
-    populateBuySelect();
-    populateRecommendSelect();
-    updateStats();
-}
-function populateBuySelect(){
-    const sel=document.getElementById("buyBookSelect");
-    sel.innerHTML="";
-    books.forEach(b=>sel.innerHTML+=`<option value="${b.id}">${b.title}</option>`);
-}
-function openModal(id){document.getElementById(id).style.display="block";}
-function closeModal(id){document.getElementById(id).style.display="none";}
+/* ===================== פונקציות מודלים ===================== */
+function openModal(id){ document.getElementById(id).style.display='block'; }
+function closeModal(id){ document.getElementById(id).style.display='none'; }
 
-// ====== רכישות ======
-function buyBook(){
-    const name=document.getElementById("buyName").value;
-    const email=document.getElementById("buyEmail").value;
-    const agree=document.getElementById("buyAgree").checked;
-    const bookId=parseInt(document.getElementById("buyBookSelect").value);
-    if(!name||!email||!agree||!bookId){alert("יש למלא את כל השדות"); return;}
-    const book=books.find(b=>b.id===bookId);
-    const purchase={id:Date.now(),name,email,book:book.title,date:new Date().toLocaleString()};
-    purchases.push(purchase);
-    localStorage.setItem("purchases",JSON.stringify(purchases));
-    alert("הרכישה בוצעה בהצלחה!"); closeModal('modalBuy'); displayBooks();
+/* ===================== פונקציות ספרים ===================== */
+function addBook() {
+const name = document.getElementById('bookName').value;
+const price = document.getElementById('bookPrice').value;
+const desc = document.getElementById('bookDescription').value;
+const img = document.getElementById('bookImage').files[0];
+const pdf = document.getElementById('bookPDF').files[0];
+if(!name||!price||!desc||!img||!pdf){ alert('נא למלא את כל השדות'); return; }
+const reader = new FileReader();
+reader.onload=function(e){
+    const imgData=e.target.result;
+    const book={id:Date.now(), name, price, desc, img:imgData, pdfName:pdf.name};
+    books.push(book);
+    localStorage.setItem('books', JSON.stringify(books));
+    updateBooksUI();
+    closeModal('addBookModal');
+};
+reader.readAsDataURL(img);
 }
 
-// ====== ממליצים ======
-function populateRecommendSelect(){
-    const sel=document.getElementById("recBook");
-    sel.innerHTML="";
-    books.forEach(b=>sel.innerHTML+=`<option value="${b.id}">${b.title}</option>`);
-    displayRecommends();
-}
-document.getElementById("recommendForm").addEventListener("submit",function(e){
-    e.preventDefault();
-    const name=document.getElementById("recName").value;
-    const bookId=parseInt(document.getElementById("recBook").value);
-    const text=document.getElementById("recText").value;
-    const imgFile=document.getElementById("recImg").files[0];
-    if(!bookId){alert("בחר ספר"); return;}
-    const reader=new FileReader();
-    reader.onload=function(e){
-        const img=e.target.result;
-        recommends.push({id:Date.now(),name,bookId,text,img});
-        localStorage.setItem("recommends",JSON.stringify(recommends));
-        displayRecommends();closeModal('modalRecommend');
-    }
-    if(imgFile){reader.readAsDataURL(imgFile);}else{recommends.push({id:Date.now(),name,bookId,text,img:""}); localStorage.setItem("recommends",JSON.stringify(recommends)); displayRecommends(); closeModal('modalRecommend');}
+/* ===================== עדכון ספרים ===================== */
+function updateBooksUI(){
+const adminList=document.getElementById('adminBooksList');
+const userList=document.getElementById('userBooksList');
+const select=document.getElementById('reviewerBookSelect');
+adminList.innerHTML=''; userList.innerHTML=''; select.innerHTML='';
+books.forEach(book=>{
+    const card=document.createElement('div'); card.className='card';
+    card.innerHTML=`<img src="${book.img}" style="width:100%;height:150px;object-fit:cover;border-radius:10px;">
+    <h4>${book.name}</h4><p>${book.desc}</p><p>₪${book.price}</p>
+    <button class="danger" onclick="deleteBook(${book.id})">מחק</button>`;
+    adminList.appendChild(card);
+
+    const userCard=document.createElement('div'); userCard.className='card';
+    userCard.innerHTML=`<img src="${book.img}" style="width:100%;height:150px;object-fit:cover;border-radius:10px;">
+    <h4>${book.name}</h4><p>${book.desc}</p><p>₪${book.price}</p>
+    <button class="primary" onclick="startPurchase(${book.id})">רכישה</button>`;
+    userList.appendChild(userCard);
+
+    const opt=document.createElement('option'); opt.value=book.id; opt.text=book.name;
+    select.appendChild(opt);
 });
-function displayRecommends(){
-    const list=document.getElementById("recommendList");
-    list.innerHTML="";
-    recommends.forEach(r=>{
-        const book=books.find(b=>b.id===r.bookId);
-        if(book){list.innerHTML+=`<div>${r.name} על הספר "${book.title}": ${r.text}</div>`;}
-    });
 }
 
-// ====== סטטיסטיקות ======
-function updateStats(){
-    const statsDiv=document.getElementById("stats");
-    statsDiv.innerHTML=`<div>מספר ספרים: ${books.length}</div><div>מספר רכישות: ${purchases.length}</div>`;
+/* ===================== מחיקת ספר ===================== */
+function deleteBook(id){
+books=books.filter(b=>b.id!==id);
+localStorage.setItem('books', JSON.stringify(books));
+updateBooksUI();
 }
 
-// ====== חיפוש וסינון ======
-function searchBooks(){
-    const q=document.getElementById("searchInput").value.toLowerCase();
-    const list=document.getElementById("bookList");
-    list.innerHTML="";
-    books.filter(b=>b.title.toLowerCase().includes(q)||b.desc.toLowerCase().includes(q)).forEach(b=>{
-        list.innerHTML+=`<div><strong>${b.title}</strong> - ${b.price}₪<br>${b.desc}</div>`;
-    });
+/* ===================== פונקציות ממליצים ===================== */
+function addReviewer() {
+const name=document.getElementById('reviewerName').value;
+const text=document.getElementById('reviewerText').value;
+const bookId=document.getElementById('reviewerBookSelect').value;
+const imgFile=document.getElementById('reviewerImage').files[0];
+const rating=document.querySelector('input[name="rating"]:checked')?.value;
+if(!name||!text||!bookId||!imgFile||!rating){ alert('נא למלא את כל השדות'); return; }
+const reader=new FileReader();
+reader.onload=function(e){
+    const imgData=e.target.result;
+    reviewers.push({id:Date.now(), name, text, bookId, img:imgData, rating});
+    localStorage.setItem('reviewers', JSON.stringify(reviewers));
+    updateReviewersUI();
+    closeModal('addReviewerModal');
+};
+reader.readAsDataURL(imgFile);
 }
 
-// ====== Admin ======
-function openAdmin(){
-    const pass=prompt("הזן סיסמה ל-Admin:");
-    if(pass==="ADMIN1"){alert("ברוך הבא ל-Admin Dashboard"); adminDashboard();}
-    else{alert("סיסמה שגויה!");}
-}
-function adminDashboard(){
-    let html="ADMIN DASHBOARD\n\nספרים:\n";
-    books.forEach((b,i)=>html+=`${i+1}. ${b.title} - ${b.price}₪\n`);
-    alert(html);
-}
-
-// ====== Chat AI דמו ======
-function chatAI(){
-    const q=document.getElementById("chatQuestion").value;
-    const log=document.getElementById("chatBox");
-    let ans="מצטער, אני לא מבין. נסה שאלה אחרת.";
-    const lq=q.toLowerCase();
-    if(lq.includes("ספר")) ans="תוכל לראות את רשימת הספרים בחלק העליון של הדף.";
-    if(lq.includes("רכישה")) ans="כדי לקנות ספר, לחץ על כפתור 'רכישה' ומלא את הפרטים.";
-    if(lq.includes("ממליץ")) ans="תוכל להוסיף ממליץ על ספר באמצעות כפתור 'הוסף ממליץ'.";
-    log.innerHTML+=`<div><strong>שאלה:</strong> ${q}</div><div><strong>AI:</strong> ${ans}</div>`;
-    log.scrollTop=log.scrollHeight;
-    document.getElementById("chatQuestion").value="";
-}
-
-// ====== אתחול ======
-displayBooks();
-   // ====== Admin Dashboard משודרג ======
-function adminDashboard(){
-    let html = "=== ADMIN DASHBOARD ===\n\nספרים:\n";
-    books.forEach((b,i)=>html+=`${i+1}. ${b.title} - ${b.price}₪\n`);
-    html+="\nממליצים:\n";
-    recommends.forEach((r,i)=>{
-        const book=books.find(b=>b.id===r.bookId);
-        html+=`${i+1}. ${r.name} על הספר "${book ? book.title : 'ללא ספר'}"\n`;
-    });
-    html+="\nרכישות:\n";
-    purchases.forEach((p,i)=>html+=`${i+1}. ${p.name} קנה ${p.book} בתאריך ${p.date}\n`);
-    alert(html);
-}
-
-// ====== עריכת ממליצים ======
-function editRecommend(id){
-    const r=recommends.find(r=>r.id===id);
-    if(!r){alert("ממליץ לא נמצא"); return;}
-    const name=prompt("שם:", r.name);
-    const text=prompt("טקסט:", r.text);
-    if(name) r.name=name;
-    if(text) r.text=text;
-    localStorage.setItem("recommends", JSON.stringify(recommends));
-    displayRecommends();
-}
-
-// ====== מחיקת ממליץ ======
-function deleteRecommend(id){
-    if(confirm("האם למחוק את הממליץ?")){
-        recommends=recommends.filter(r=>r.id!==id);
-        localStorage.setItem("recommends", JSON.stringify(recommends));
-        displayRecommends();
-    }
-}
-
-// ====== סטטיסטיקות משודרגות ======
-function updateStats(){
-    const statsDiv=document.getElementById("stats");
-    statsDiv.innerHTML=`<div>מספר ספרים: ${books.length}</div>
-                        <div>מספר ממליצים: ${recommends.length}</div>
-                        <div>מספר רכישות: ${purchases.length}</div>`;
-}
-
-// ====== חיפוש וסינון מתקדם ======
-function searchBooks(){
-    const q=document.getElementById("searchInput").value.toLowerCase();
-    const list=document.getElementById("bookList");
-    list.innerHTML="";
-    books.filter(b=>b.title.toLowerCase().includes(q)||b.desc.toLowerCase().includes(q)).forEach(b=>{
-        const recs=recommends.filter(r=>r.bookId===b.id);
-        let recText = recs.map(r=>`<br>ממליץ: ${r.name} - "${r.text}"`).join("");
-        list.innerHTML+=`<div><strong>${b.title}</strong> - ${b.price}₪<br>${b.desc}${recText}</div>`;
-    });
-}
-
-// ====== עדכון סלקטורים של ממליצים ברשימה ======
-function populateRecommendSelect(){
-    const sel=document.getElementById("recBook");
-    sel.innerHTML="";
-    books.forEach(b=>sel.innerHTML+=`<option value="${b.id}">${b.title}</option>`);
-    displayRecommends();
-}
-
-// ====== הצגת ממליצים בצד משתמש ======
-function displayRecommends(){
-    const list=document.getElementById("recommendList");
-    list.innerHTML="";
-    recommends.forEach(r=>{
-        const book=books.find(b=>b.id===r.bookId);
-        if(book){
-            list.innerHTML+=`<div>
-                <strong>${r.name}</strong> על הספר "${book.title}": ${r.text}
-                ${r.img?`<br><img src="${r.img}" width="80" style="border-radius:5px;">`:''}
-                <br><button onclick="editRecommend(${r.id})">ערוך</button>
-                <button onclick="deleteRecommend(${r.id})">מחק</button>
-            </div><hr>`;
-        }
-    });
-}
-
-// ====== אתחול מחדש לאחר טעינת הדף ======
-displayBooks();
-populateRecommendSelect();
-updateStats(); 
-    // ====== Chat AI מתקדם עם "זיכרון" ומילים חכמות ======
-const aiDatabase=[
-    {keywords:["ספר","ספרים","ספרי"], answer:"תוכל לראות את רשימת הספרים בחלק העליון של הדף. הקלק על כותרת הספר למידע נוסף."},
-    {keywords:["רכישה","קנה","קניה","קנייה"], answer:"כדי לקנות ספר, לחץ על כפתור 'רכישה' ומלא את הפרטים שלך. אל תשכח לאשר הצהרת פרטיות."},
-    {keywords:["ממליץ","המלצה","המלצות"], answer:"כדי להוסיף ממליץ על ספר, לחץ על כפתור 'הוסף ממליץ', בחר ספר, והכנס שם, טקסט ותמונה."},
-    {keywords:["סטטיסטיקה","סטטיסטיקות"], answer:"סטטיסטיקות החנות מופיעות למטה: מספר ספרים, ממליצים ורכישות."},
-    {keywords:["חיפוש","סינון"], answer:"תוכל להשתמש בתיבת החיפוש למעלה כדי למצוא ספרים לפי שם או תיאור."},
-    {keywords:["AI","עזרה","צ׳אט"], answer:"אני כאן כדי לעזור לך לנווט בחנות ולענות על שאלות על ספרים, רכישות וממליצים."}
-];
-
-function chatAI(){
-    const q=document.getElementById("chatQuestion").value.toLowerCase();
-    const log=document.getElementById("chatBox");
-    let ans="מצטער, אני לא מבין. נסה שאלה אחרת.";
-    aiDatabase.forEach(r=>{
-        if(r.keywords.some(k=>q.includes(k))) ans=r.answer;
-    });
-    log.innerHTML+=`<div><strong>שאלה:</strong> ${q}</div><div><strong>AI:</strong> ${ans}</div>`;
-    log.scrollTop=log.scrollHeight;
-    document.getElementById("chatQuestion").value="";
-}
-
-// ====== רכישות עם דמו קבלה אוטומטית ======
-function buyBook(){
-    const name=document.getElementById("buyName").value.trim();
-    const email=document.getElementById("buyEmail").value.trim();
-    const agree=document.getElementById("buyAgree").checked;
-    const bookId=parseInt(document.getElementById("buyBookSelect").value);
-    if(!name || !email || !agree || !bookId){alert("יש למלא את כל השדות"); return;}
-    const book=books.find(b=>b.id===bookId);
-    const purchase={id:Date.now(),name,email,book:book.title,date:new Date().toLocaleString()};
-    purchases.push(purchase);
-    localStorage.setItem("purchases",JSON.stringify(purchases));
-
-    // דמו שליחת קבלה אוטומטית למייל
-    alert(`הרכישה בוצעה בהצלחה!\n\nקבלה (דמו):\nקונה: ${name}\nספר: ${book.title}\nתאריך: ${purchase.date}\n\n**במציאות, הקבלה תישלח למייל**`);
-    
-    closeModal('modalBuy');
-    displayBooks();
-}
-
-// ====== אנימציות SUS מתקדמות ======
-function addSUSAnimations(){
-    const buttons=document.querySelectorAll('button');
-    buttons.forEach(btn=>{
-        btn.addEventListener('mouseover',()=>{btn.style.backgroundColor="#3498db"; btn.style.color="#fff"; btn.style.transform="scale(1.05)";});
-        btn.addEventListener('mouseout',()=>{btn.style.backgroundColor=""; btn.style.color=""; btn.style.transform="scale(1)";});
-        btn.addEventListener('mousedown',()=>{btn.style.transform="scale(0.95)";});
-        btn.addEventListener('mouseup',()=>{btn.style.transform="scale(1.05)";});
-    });
-}
-
-// ====== אתחול חכם אחרי טעינת הדף ======
-window.addEventListener('load',()=>{
-    displayBooks();
-    populateRecommendSelect();
-    updateStats();
-    addSUSAnimations();
+function updateReviewersUI(){
+const list=document.getElementById('adminReviewersList');
+list.innerHTML='';
+reviewers.forEach(r=>{
+    const book=books.find(b=>b.id==r.bookId);
+    const card=document.createElement('div'); card.className='card';
+    card.innerHTML=`
+    <img src="${r.img}" class="round-img">
+    <h4>${r.name}</h4>
+    <p>${r.text}</p>
+    <p>על ספר: ${book?.name}</p>
+    <p>דירוג: ${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</p>
+    <button class="danger" onclick="deleteReviewer(${r.id})">מחק ממליץ</button>`;
+    list.appendChild(card);
 });
+}
 
-// ====== כלי עזר למודולים נוספים ======
-function generateID(){return Date.now()+Math.floor(Math.random()*1000);}
+function deleteReviewer(id){
+reviewers=reviewers.filter(r=>r.id!==id);
+localStorage.setItem('reviewers', JSON.stringify(reviewers));
+updateReviewersUI();
+}
+
+/* ===================== פונקציות רכישה ===================== */
+function startPurchase(bookId){
+currentPurchaseBookId=bookId;
+document.getElementById('buyerName').value='';
+document.getElementById('buyerEmail').value='';
+document.getElementById('legalCheckbox').checked=false;
+document.getElementById('purchaseMessage').innerHTML='';
+openModal('purchaseModal');
+}
+
+function confirmPurchase(){
+const name=document.getElementById('buyerName').value;
+const email=document.getElementById('buyerEmail').value;
+const legal=document.getElementById('legalCheckbox').checked;
+if(!name||!email){ alert('נא למלא את כל השדות'); return;}
+if(!legal){ alert('יש לאשר תנאי פרטיות'); return;}
+purchases.push({id:Date.now(), bookId:currentPurchaseBookId, buyerName:name, buyerEmail:email, status:'pending'});
+localStorage.setItem('purchases', JSON.stringify(purchases));
+document.getElementById('purchaseMessage').innerHTML='<div class="success-message">הרכישה נשלחה למנהל לאישור</div>';
+updatePurchasesUI();
+setTimeout(()=>closeModal('purchaseModal'),1500);
+}
+
+/* ===================== ניהול רכישות ===================== */
+function updatePurchasesUI(){
+const list=document.getElementById('purchasesList');
+list.innerHTML='';
+purchases.forEach(p=>{
+    const book=books.find(b=>b.id==p.bookId);
+    const card=document.createElement('div'); card.className='card';
+    card.innerHTML=`
+    <p>רכישת ספר: ${book?.name}</p>
+    <p>רוכש: ${p.buyerName} | ${p.buyerEmail}</p>
+    <p>סטטוס: ${p.status}</p>
+    ${p.status==='pending'?`
+    <button class="primary" onclick="approvePurchase(${p.id})">אישור</button>
+    <button class="danger" onclick="rejectPurchase(${p.id})">סירוב</button>`:''}`;
+    list.appendChild(card);
+});
+}
+
+function approvePurchase(id){
+const purchase=purchases.find(p=>p.id===id);
+if(purchase){ 
+    purchase.status='approved';
+    localStorage.setItem('purchases', JSON.stringify(purchases));
+    alert(`הרכישה אושרה. לשלוח PDF לרוכש: ${purchase.buyerEmail}`);
+    updatePurchasesUI();
+}
+}
+
+function rejectPurchase(id){
+const purchase=purchases.find(p=>p.id===id);
+if(purchase){ 
+    purchase.status='rejected';
+    localStorage.setItem('purchases', JSON.stringify(purchases));
+    alert(`הרכישה נדחתה. שליחת מייל לרוכש: ${purchase.buyerEmail}`);
+    updatePurchasesUI();
+}
+}
+
+/* ===================== אתחול ===================== */
+updateBooksUI();
+updateReviewersUI();
+updatePurchasesUI();
 </script>
 
+<footer>
+<p>© 2026 HFL Digital Store</p>
+</footer>
 </body>
 </html>
