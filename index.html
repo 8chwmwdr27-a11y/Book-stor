@@ -3,31 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>bookstore_by-AD v0.4</title>
+<title>bookstore_by-AD LEVEL GOD ULTIMATE</title>
 <style>
 body{margin:0;font-family:'Segoe UI',sans-serif;background:#f5f5f7;color:#333;}
-header{background:#4a90e2;color:#fff;padding:15px;display:flex;justify-content:space-between;align-items:center;}
-header h1{margin:0;}
+header{background:#4a90e2;color:#fff;padding:15px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;}
+header h1{margin:0;font-size:1.5em;}
 .container{padding:20px;max-width:1200px;margin:auto;}
 .book-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px;}
-.book-card{background:#fff;padding:15px;border-radius:8px;box-shadow:0 4px 8px rgba(0,0,0,0.1);transition:transform 0.3s,box-shadow 0.3s;}
-.book-card:hover{transform:translateY(-5px);box-shadow:0 8px 16px rgba(0,0,0,0.2);}
-.book-card img{width:100%;height:250px;object-fit:cover;border-radius:5px;}
-button{padding:10px 15px;margin-top:10px;background:#4a90e2;color:#fff;border:none;border-radius:5px;cursor:pointer;transition:background 0.3s;}
+.book-card{background:#fff;padding:15px;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.1);transition:transform 0.3s,box-shadow 0.3s;}
+.book-card:hover{transform:translateY(-5px);box-shadow:0 8px 20px rgba(0,0,0,0.2);}
+.book-card img{width:100%;height:250px;object-fit:cover;border-radius:8px;}
+button{padding:10px 15px;margin-top:10px;background:#4a90e2;color:#fff;border:none;border-radius:5px;cursor:pointer;transition:0.3s;}
 button:hover{background:#357ABD;}
-#chatButton{position:fixed;bottom:20px;right:20px;background:#ff5a5f;border-radius:50%;width:60px;height:60px;font-size:24px;display:flex;justify-content:center;align-items:center;cursor:pointer;box-shadow:0 4px 8px rgba(0,0,0,0.2);}
-#chatBox{position:fixed;bottom:90px;right:20px;width:300px;max-height:400px;background:#fff;border-radius:10px;box-shadow:0 8px 16px rgba(0,0,0,0.3);display:none;flex-direction:column;overflow:hidden;}
-#chatHeader{background:#ff5a5f;color:#fff;padding:10px;text-align:center;}
+#chatButton{position:fixed;bottom:20px;right:20px;background:#ff5a5f;border-radius:50%;width:60px;height:60px;font-size:28px;display:flex;justify-content:center;align-items:center;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,0.3);z-index:1000;}
+#chatBox{position:fixed;bottom:90px;right:20px;width:320px;max-height:450px;background:#fff;border-radius:12px;box-shadow:0 12px 28px rgba(0,0,0,0.35);display:none;flex-direction:column;overflow:hidden;z-index:1000;}
+#chatHeader{background:#ff5a5f;color:#fff;padding:12px;text-align:center;font-weight:bold;}
 #chatMessages{flex:1;padding:10px;overflow-y:auto;}
-.chat-message{margin:5px 0;padding:8px 12px;border-radius:15px;max-width:80%;animation:fadeIn 0.5s;}
+.chat-message{margin:5px 0;padding:8px 12px;border-radius:15px;max-width:80%;animation:fadeIn 0.4s;}
 .user-message{background:#e0e0e0;align-self:flex-end;}
 .ai-message{background:#4a90e2;color:#fff;align-self:flex-start;}
 #chatInput{display:flex;border-top:1px solid #ccc;}
 #chatInput input{flex:1;padding:10px;border:none;outline:none;}
 #chatInput button{border-radius:0;}
-.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:none;justify-content:center;align-items:center;}
-.modal-content{background:#fff;padding:20px;border-radius:10px;width:90%;max-width:500px;max-height:90%;overflow:auto;}
-.stats {margin-top:20px;}
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:none;justify-content:center;align-items:center;z-index:1000;}
+.modal-content{background:#fff;padding:20px;border-radius:12px;width:90%;max-width:500px;max-height:90%;overflow:auto;}
+.stats {margin-top:20px;padding:10px;background:#fff;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.1);}
 .stats div {margin-bottom:10px;}
 .admin-buttons button{display:block;width:100%;margin:5px 0;}
 @keyframes fadeIn{from{opacity:0} to{opacity:1}}
@@ -37,7 +37,7 @@ button:hover{background:#357ABD;}
 <body>
 
 <header>
-<h1>bookstore_by-AD v0.4</h1>
+<h1>bookstore_by-AD LEVEL GOD ULTIMATE</h1>
 <button onclick="adminLogin()">כניסה למנהל</button>
 </header>
 
@@ -47,10 +47,9 @@ button:hover{background:#357ABD;}
 <div class="stats" id="stats"></div>
 </div>
 
-<!-- Chat AI Button -->
 <div id="chatButton" onclick="toggleChat()">💬</div>
 <div id="chatBox">
-<div id="chatHeader">HFL AI Assistant</div>
+<div id="chatHeader">AI Assistant</div>
 <div id="chatMessages"></div>
 <div id="chatInput">
 <input type="text" id="userChat" placeholder="כתוב כאן..." onkeypress="checkEnter(event)">
@@ -58,27 +57,24 @@ button:hover{background:#357ABD;}
 </div>
 </div>
 
-<!-- מודל רכישה חוקית -->
+<!-- רכישה -->
 <div class="modal" id="modalPurchase">
   <div class="modal-content">
     <h3>פרטי רכישה</h3>
     <form id="purchaseForm">
       <label>שם מלא:</label><br>
       <input type="text" id="buyerName" placeholder="שם מלא" required><br><br>
-      
       <label>מייל:</label><br>
       <input type="email" id="buyerEmail" placeholder="example@mail.com" required><br><br>
-      
       <input type="checkbox" id="agreeTerms" required>
       <label for="agreeTerms">אני מאשר את <a href="#" target="_blank">תנאי השימוש</a> ו<em>מדיניות הפרטיות</em></label><br><br>
-      
       <button type="submit">אישור רכישה</button>
       <button type="button" onclick="closeModal('modalPurchase')">ביטול</button>
     </form>
   </div>
 </div>
 
-<!-- מודל מנהל כולל סיסמה -->
+<!-- Admin Dashboard -->
 <div class="modal" id="modalAdmin">
 <div class="modal-content">
 <h3>Admin Dashboard</h3>
@@ -88,71 +84,42 @@ button:hover{background:#357ABD;}
 <button onclick="populateDelete();openModal('modalDelete')">מחיקת ספר</button>
 <button onclick="populateRecommend();openModal('modalRecommend')">ממליצים</button>
 <button onclick="updateStats();alert('סטטיסטיקות עודכנו!')">סטטיסטיקות</button>
+<button onclick="viewPurchases();">רכישות</button>
 <button onclick="closeModal('modalAdmin')">יציאה</button>
 </div>
 </div>
 </div>
 
-<!-- מודלים נוספים כמו יצירה, עריכה, מחיקה, ממליצים נשארים כמו בגרסה הקודמת -->
+<!-- יצירת ספר חדש -->
 <div class="modal" id="modalCreate">
 <div class="modal-content">
 <h3>יצירת ספר חדש</h3>
-<input type="text" id="newTitle" placeholder="שם הספר"><br><br>
-<input type="text" id="newPrice" placeholder="מחיר"><br><br>
-<textarea id="newDesc" placeholder="תיאור קצר"></textarea><br><br>
-<input type="text" id="newImg" placeholder="קישור תמונה"><br><br>
-<input type="text" id="newFile" placeholder="קישור קובץ ספר"><br><br>
-<button onclick="createBook()">פרסם</button>
-<button onclick="closeModal('modalCreate')">סגור</button>
-</div>
-</div>
-
-<div class="modal" id="modalEdit">
-<div class="modal-content">
-<h3>עריכת ספר</h3>
-<select id="editSelect" onchange="loadEditBook()"></select><br><br>
-<input type="text" id="editTitle" placeholder="שם הספר"><br><br>
-<input type="text" id="editPrice" placeholder="מחיר"><br><br>
-<textarea id="editDesc" placeholder="תיאור קצר"></textarea><br><br>
-<input type="text" id="editImg" placeholder="קישור תמונה"><br><br>
-<input type="text" id="editFile" placeholder="קישור קובץ ספר"><br><br>
-<button onclick="saveEditBook()">שמור</button>
-<button onclick="closeModal('modalEdit')">סגור</button>
-</div>
-</div>
-
-<div class="modal" id="modalDelete">
-<div class="modal-content">
-<h3>מחיקת ספר</h3>
-<select id="deleteSelect"></select><br><br>
-<button onclick="deleteBook()">מחק ספר</button>
-<button onclick="closeModal('modalDelete')">סגור</button>
-</div>
-</div>
-
-<div class="modal" id="modalRecommend">
-<div class="modal-content">
-<h3>יצירת ממליץ</h3>
-<input type="text" id="recName" placeholder="שם הממליץ"><br><br>
-<input type="text" id="recImg" placeholder="תמונת פרופיל"><br><br>
-<select id="recBookSelect"></select><br><br>
-<button onclick="createRecommend()">צור ממליץ</button>
-<button onclick="closeModal('modalRecommend')">סגור</button>
+<form id="createForm">
+<label>שם הספר:</label><br>
+<input type="text" id="newTitle" required><br><br>
+<label>תיאור:</label><br>
+<textarea id="newDesc" required></textarea><br><br>
+<label>מחיר:</label><br>
+<input type="text" id="newPrice" required><br><br>
+<label>תמונה ראשית:</label><br>
+<input type="file" id="newImg" accept="image/*" required><br><br>
+<label>קובץ ספר (PDF):</label><br>
+<input type="file" id="newFile" accept="application/pdf" required><br><br>
+<button type="submit">פרסם ספר</button>
+<button type="button" onclick="closeModal('modalCreate')">ביטול</button>
+</form>
 </div>
 </div>
 
 <script>
 // ====== נתונים ראשוניים ======
-let books = JSON.parse(localStorage.getItem("books")) || [
-{id:1,title:"ספר ראשון",price:"49₪",desc:"תיאור קצר",img:"https://via.placeholder.com/200x250?text=Book1",file:"file1.pdf"},
-{id:2,title:"ספר שני",price:"59₪",desc:"תיאור קצר",img:"https://via.placeholder.com/200x250?text=Book2",file:"file2.pdf"}
-];
-let recommends = JSON.parse(localStorage.getItem("recommends")) || [];
+let books = JSON.parse(localStorage.getItem("books")) || [];
+let purchases = JSON.parse(localStorage.getItem("purchases")) || [];
 localStorage.setItem("books",JSON.stringify(books));
-localStorage.setItem("recommends",JSON.stringify(recommends));
+localStorage.setItem("purchases",JSON.stringify(purchases));
 displayBooks(); updateStats();
 
-// ====== תצוגת ספרים ======
+// ====== הצגת ספרים ======
 function displayBooks(){
 const grid=document.getElementById("bookGrid");
 grid.innerHTML="";
@@ -178,7 +145,7 @@ filtered.forEach(book=>{
 });
 }
 
-// ====== Chat AI חכם ======
+// ====== Chat AI מתקדם ======
 const chatMessages=document.getElementById("chatMessages");
 const aiDB=[
 {keywords:["קנה","רכישה","איך לקנות"],answer:"כדי לקנות ספר, לחץ על הספר בדף הבית ואז 'קנה עכשיו'."},
@@ -189,106 +156,71 @@ const aiDB=[
 ];
 function toggleChat(){const box=document.getElementById("chatBox");box.style.display=box.style.display==="flex"?"none":"flex";}
 function checkEnter(e){if(e.key==="Enter") sendChat();}
-function sendChat(){const input=document.getElementById("userChat");const text=input.value.trim();if(!text) return;appendMessage(text,"user");input.value="";setTimeout(()=>{generateAIResponse(text)},500);}
+function sendChat(){const input=document.getElementById("userChat");const text=input.value.trim();if(!text) return;appendMessage(text,"user");input.value="";setTimeout(()=>{generateAIResponse(text)},300);}
 function appendMessage(msg,type){const div=document.createElement("div");div.className=type==="user"?"chat-message user-message":"chat-message ai-message";div.innerText=msg;chatMessages.appendChild(div);chatMessages.scrollTop=chatMessages.scrollHeight;}
 function generateAIResponse(text){text=text.toLowerCase();let response="סליחה, לא הבנתי. שאל על רכישות, הורדות או ספרים.";for(let item of aiDB){if(item.keywords.some(k=>text.includes(k))){response=item.answer; break;}}appendMessage(response,"ai");}
 
 // ====== כניסה למנהל ======
-function adminLogin(){
-let pass=prompt("הזן סיסמה למנהל:");
-if(pass==="ADMIN1"){openModal("modalAdmin");}else{alert("סיסמה שגויה!");}}
-  
-// ====== מודלי מנהל כמו בגרסה הקודמת ======
+function adminLogin(){let pass=prompt("הזן סיסמה למנהל:");if(pass==="ADMIN1"){openModal("modalAdmin");}else{alert("סיסמה שגויה!");}}
 function openModal(id){document.getElementById(id).style.display="flex";}
 function closeModal(id){document.getElementById(id).style.display="none";}
 
-// יצירה, עריכה, מחיקה, ממליצים, סטטיסטיקות – נשארים כמו בגרסה הקודמת
-// ====== יצירת ספר ======
-function createBook(){
-    let b={id:Date.now(),title:document.getElementById("newTitle").value,price:document.getElementById("newPrice").value,desc:document.getElementById("newDesc").value,img:document.getElementById("newImg").value,file:document.getElementById("newFile").value};
-    books.push(b); localStorage.setItem("books",JSON.stringify(books));
-    displayBooks(); updateStats(); closeModal("modalCreate");
-}
+// ====== רכישה חוקית ======
+let selectedBookId = null;
+function buyBook(id){selectedBookId = id; openModal("modalPurchase");}
+document.getElementById("purchaseForm").addEventListener("submit", function(e){
+e.preventDefault();
+const name = document.getElementById("buyerName").value;
+const email = document.getElementById("buyerEmail").value;
+const agreed = document.getElementById("agreeTerms").checked;
+if(!agreed){alert("יש לאשר את תנאי השימוש ומדיניות הפרטיות."); return;}
+const book = books.find(b => b.id === selectedBookId);
+const purchaseRecord = {id:Date.now(),book:book.title,name,email,date:new Date().toLocaleString()};
+purchases.push(purchaseRecord);
+localStorage.setItem("purchases", JSON.stringify(purchases));
+alert(`רכישת ${book.title} בוצעה בהצלחה!\nקבלה תישלח למייל: ${email} (דמו)`);
+closeModal('modalPurchase');
+});
 
-// ====== עריכת ספר ======
-function populateEdit(){
-    let sel=document.getElementById("editSelect"); sel.innerHTML="";
-    books.forEach(b=>{let opt=document.createElement("option"); opt.value=b.id; opt.innerText=b.title; sel.appendChild(opt);});
-    loadEditBook();
+// ====== יצירת ספר עם קבצים ======
+document.getElementById("createForm").addEventListener("submit",function(e){
+e.preventDefault();
+const title=document.getElementById("newTitle").value;
+const desc=document.getElementById("newDesc").value;
+const price=document.getElementById("newPrice").value;
+const imgFile=document.getElementById("newImg").files[0];
+const pdfFile=document.getElementById("newFile").files[0];
+if(!imgFile || !pdfFile){alert("יש לבחור קבצים"); return;}
+const readerImg=new FileReader();
+readerImg.onload=function(eImg){
+    const imgData=eImg.target.result;
+    const readerPDF=new FileReader();
+    readerPDF.onload=function(ePDF){
+        const pdfData=ePDF.target.result;
+        const book={id:Date.now(),title,desc,price,img:imgData,file:pdfData};
+        books.push(book);
+        localStorage.setItem("books",JSON.stringify(books));
+        displayBooks();updateStats();closeModal('modalCreate');
+        alert("הספר פורסם בהצלחה!");
+    }
+    readerPDF.readAsDataURL(pdfFile);
 }
-function loadEditBook(){
-    let id=parseInt(document.getElementById("editSelect").value);
-    let b=books.find(x=>x.id===id);
-    document.getElementById("editTitle").value=b.title;
-    document.getElementById("editPrice").value=b.price;
-    document.getElementById("editDesc").value=b.desc;
-    document.getElementById("editImg").value=b.img;
-    document.getElementById("editFile").value=b.file;
-}
-function saveEditBook(){
-    let id=parseInt(document.getElementById("editSelect").value);
-    let b=books.find(x=>x.id===id);
-    b.title=document.getElementById("editTitle").value;
-    b.price=document.getElementById("editPrice").value;
-    b.desc=document.getElementById("editDesc").value;
-    b.img=document.getElementById("editImg").value;
-    b.file=document.getElementById("editFile").value;
-    localStorage.setItem("books",JSON.stringify(books));
-    displayBooks(); updateStats(); closeModal("modalEdit");
-}
-
-// ====== מחיקת ספר ======
-function populateDelete(){
-    let sel=document.getElementById("deleteSelect"); sel.innerHTML="";
-    books.forEach(b=>{let opt=document.createElement("option"); opt.value=b.id; opt.innerText=b.title; sel.appendChild(opt);});
-}
-function deleteBook(){
-    let id=parseInt(document.getElementById("deleteSelect").value);
-    books=books.filter(x=>x.id!==id);
-    localStorage.setItem("books",JSON.stringify(books));
-    displayBooks(); updateStats(); closeModal("modalDelete");
-}
-
-// ====== ממליצים ======
-function populateRecommend(){
-    let sel=document.getElementById("recBookSelect"); sel.innerHTML="";
-    books.forEach(b=>{let opt=document.createElement("option"); opt.value=b.id; opt.innerText=b.title; sel.appendChild(opt);});
-}
-function createRecommend(){
-    let r={name:document.getElementById("recName").value,img:document.getElementById("recImg").value,bookId:parseInt(document.getElementById("recBookSelect").value)};
-    recommends.push(r); localStorage.setItem("recommends",JSON.stringify(recommends));
-    alert("ממליץ נוצר בהצלחה!");
-    closeModal("modalRecommend");
-    updateStats();
-}
+readerImg.readAsDataURL(imgFile);
+});
 
 // ====== סטטיסטיקות ======
 function updateStats(){
     const statsDiv=document.getElementById("stats");
     statsDiv.innerHTML=`<div>מספר ספרים בחנות: ${books.length}</div>
-                        <div>מספר ממליצים: ${recommends.length}</div>`;
+                        <div>מספר רכישות: ${purchases.length}</div>`;
 }
 
-// ====== מודל רכישה חוקית ======
-let selectedBookId = null;
-function buyBook(id){
-    selectedBookId = id;
-    openModal("modalPurchase");
+// ====== צפייה ברכישות ======
+function viewPurchases(){
+    let msg = purchases.length ? purchases.map(p=>`${p.name} קנה ${p.book} בתאריך ${p.date}`).join("\n") : "אין רכישות עדיין.";
+    alert(msg);
 }
-document.getElementById("purchaseForm").addEventListener("submit", function(e){
-    e.preventDefault();
-    const name = document.getElementById("buyerName").value;
-    const email = document.getElementById("buyerEmail").value;
-    const agreed = document.getElementById("agreeTerms").checked;
-    if(!agreed){alert("יש לאשר את תנאי השימוש ומדיניות הפרטיות."); return;}
-    const book = books.find(b => b.id === selectedBookId);
-    const purchaseRecord = {id:Date.now(),book:book.title,name,email,date:new Date().toLocaleString()};
-    let purchases = JSON.parse(localStorage.getItem("purchases")) || [];
-    purchases.push(purchaseRecord);
-    localStorage.setItem("purchases", JSON.stringify(purchases));
-    alert(`רכישת ${book.title} בוצעה בהצלחה!\nקבלה תישלח למייל: ${email} (דמו)`);
-    closeModal('modalPurchase');
-});
 </script>
+
 </body>
 </html>
